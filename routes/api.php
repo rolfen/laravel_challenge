@@ -3,6 +3,10 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+use App\Models\Book;
+use App\Models\Author;
+
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -16,4 +20,9 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
+});
+
+
+Route::get('/authors/{author}', function (Author $author) {
+    return $author->name;
 });
