@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\Libraries;
+
 
 
 /*
@@ -24,5 +26,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::get('/authors/{author}', function (Author $author) {
-    return $author->name;
+    return $author;
+});
+
+Route::get('/authors/{author}/books', function (Author $author) {
+    return $author->books()->get();
+});
+
+Route::get('/books/{book}', function (Book $book) {
+    return $book;
+});
+
+Route::get('/books/{book}/libraries', function (Book $book) {
+    return $book->libraries()->get();
+});
+
+Route::get('/libraries/{library}', function (Library $library) {
+    return $library;
 });
