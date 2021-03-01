@@ -22,7 +22,7 @@ class CreateTables extends Migration
                 false,  // no auto-increment
                 true    // unsigned
             );
-
+            $table->softDeletes();
             $table->foreign('author_id')->references('id')->on('author')->onDelete('cascade');
         });
 
@@ -62,6 +62,5 @@ class CreateTables extends Migration
         Schema::dropIfExists('author');
         Schema::dropIfExists('library');
         Schema::dropIfExists('book_to_library');
-
     }
 }
