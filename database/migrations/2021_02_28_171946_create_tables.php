@@ -13,7 +13,7 @@ class CreateTables extends Migration
      */
     public function up()
     {
-        Schema::create('book', function (Blueprint $table) {
+        Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->integer('author_id')->unsigned();
@@ -26,7 +26,7 @@ class CreateTables extends Migration
             $table->foreign('author_id')->references('id')->on('author')->onDelete('cascade');
         });
 
-        Schema::create('author', function (Blueprint $table) {
+        Schema::create('authors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->date('birth_date');
@@ -34,13 +34,13 @@ class CreateTables extends Migration
         });
 
 
-        Schema::create('library', function (Blueprint $table) {
+        Schema::create('libraries', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('address');
         });
 
-        Schema::create('book_to_library', function (Blueprint $table) {
+        Schema::create('books_to_libraries', function (Blueprint $table) {
             $table->integer('book_id')->unsigned();
             $table->integer('library_id')->unsigned();
             $table->unique(['book_id', 'library_id']);
@@ -58,9 +58,9 @@ class CreateTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('book');
-        Schema::dropIfExists('author');
-        Schema::dropIfExists('library');
-        Schema::dropIfExists('book_to_library');
+        Schema::dropIfExists('books');
+        Schema::dropIfExists('authors');
+        Schema::dropIfExists('libraries');
+        Schema::dropIfExists('books_to_libraries');
     }
 }
