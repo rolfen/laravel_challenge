@@ -17,11 +17,7 @@ class CreateTables extends Migration
             $table->id();
             $table->string('name');
             $table->integer('author_id')->unsigned();
-            $table->smallInteger(
-                'year', 
-                false,  // no auto-increment
-                true    // unsigned
-            );
+            $table->smallInteger('year');
             $table->softDeletes();
             $table->foreign('author_id')->references('id')->on('author')->onDelete('cascade');
         });
