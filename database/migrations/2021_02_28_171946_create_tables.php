@@ -40,8 +40,8 @@ class CreateTables extends Migration
             $table->integer('book_id')->unsigned();
             $table->integer('library_id')->unsigned();
             $table->unique(['book_id', 'library_id']);
-            $table->foreign('book_id')->references('id')->on('book')->onDelete('cascade');
-            $table->foreign('library_id')->references('id')->on('library')->onDelete('cascade');            
+            $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');
+            $table->foreign('library_id')->references('id')->on('libraries')->onDelete('cascade');            
         });
 
 

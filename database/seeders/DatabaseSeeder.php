@@ -6,6 +6,7 @@ use Illuminate\Database\Seeder;
 
 use App\Models\Book;
 use App\Models\Author;
+use App\Models\Library;
 
 
 class DatabaseSeeder extends Seeder
@@ -18,9 +19,18 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
 
-        Book::factory()
-        	->count(5)
-        	->for(Author::factory()->create())
+    	$author1 = Author::factory()->create();
+    	$author2 = Author::factory()->create();
+
+
+        $bookFactory = Book::factory()
+        	->count(3)
+        	->for($author1);
+
+
+        Library::factory()
+        	->count(2)
+        	->has($bookFactory)
         	->create();
 
     }

@@ -6,15 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+use App\Models\Author;
+use App\Models\Library;
+
+
 class Book extends Model
 {
+    public $timestamps = false;
+
     use HasFactory;
 
     use SoftDeletes;
 
     protected $fillable = ['name', 'year'];
-
-    public $timestamps = false;
 
     protected $hidden = ['deleted_at']; // why isn't Laravel doing this for me?
 

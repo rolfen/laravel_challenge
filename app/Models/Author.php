@@ -5,11 +5,15 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Book;
+use App\Models\Library;
+
+
 class Author extends Model
 {
-    use HasFactory;
-
     public $timestamps = false;
+
+    use HasFactory;
 
     public function books()
     {
