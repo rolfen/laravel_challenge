@@ -23,15 +23,25 @@ class DatabaseSeeder extends Seeder
     	$author2 = Author::factory()->create();
 
 
-        $bookFactory = Book::factory()
+        $bookFactory1 = Book::factory()
         	->count(3)
         	->for($author1);
+
+        $bookFactory2 = Book::factory()
+        	->count(2)
+        	->for($author2);
 
 
         Library::factory()
         	->count(2)
-        	->has($bookFactory)
+        	->has($bookFactory1)
         	->create();
+
+        Library::factory()
+        	->count(2)
+        	->has($bookFactory2)
+        	->create();
+
 
     }
 }
