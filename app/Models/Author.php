@@ -9,11 +9,17 @@ class Author extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+
     public function books()
     {
         return $this->hasMany(Book::class);
     }
 
+    public function libraries()
+    {
+        return $this->belongsToMany(Library::class);
+    }
 
     protected $fillable = ['name', 'birth_date', 'genre'];
 

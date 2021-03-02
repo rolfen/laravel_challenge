@@ -19,7 +19,7 @@ class CreateTables extends Migration
             $table->integer('author_id')->unsigned();
             $table->smallInteger('year');
             $table->softDeletes();
-            $table->foreign('author_id')->references('id')->on('author')->onDelete('cascade');
+            $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
         });
 
         Schema::create('authors', function (Blueprint $table) {
@@ -36,7 +36,7 @@ class CreateTables extends Migration
             $table->string('address');
         });
 
-        Schema::create('books_to_libraries', function (Blueprint $table) {
+        Schema::create('book_library', function (Blueprint $table) {
             $table->integer('book_id')->unsigned();
             $table->integer('library_id')->unsigned();
             $table->unique(['book_id', 'library_id']);
@@ -57,6 +57,6 @@ class CreateTables extends Migration
         Schema::dropIfExists('books');
         Schema::dropIfExists('authors');
         Schema::dropIfExists('libraries');
-        Schema::dropIfExists('books_to_libraries');
+        Schema::dropIfExists('book_library');
     }
 }
