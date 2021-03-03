@@ -37,13 +37,27 @@ Route::get('/author/{author}/books', function (Author $author) {
 });
 
 Route::get('/book/{book}', function (Book $book) {
-    return $book;
+	$details = [
+    	'title' => $book->name,
+    	'year' => $book->year,
+    	'author' => $book->author->name,
+    	'genre' => $book->author->genre,
+    	'libraries' => []
+    ];
+    foreach ($book->libraries as $library) {
+    	array_push($details['libraries'],[
+  	    	'id' => $library->id,
+    		'name' => $library->name,
+    		'address' => $library->address
+    	]);
+    }
+    return $details;
 });
 
 Route::get('/book/{book}/libraries', function (Book $book) {
     return $book->libraries()->get();
 });
 
-Route::get('/library/{library}', function (Library $library) {
-    return $library;
+Route::get('/library/{library}/books', function (Library $library) {
+    return $library->with('books')->get();
 });
