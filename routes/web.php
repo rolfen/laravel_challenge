@@ -23,7 +23,7 @@ Route::get('/', function () {
 	// dd( Book::with('author')->get()->toArray() );
 
 	$data = [
-		"books" => dd(Book::with('author', 'libraries')->get()->toArray())
+		"books" => Book::with('author', 'libraries')->get()->toArray()
 	];
 
     return view('list', $data);

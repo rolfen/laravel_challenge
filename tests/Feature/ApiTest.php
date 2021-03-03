@@ -1,23 +1,18 @@
 <?php
 
-namespace Tests;
-
+namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
+//use Illuminate\Foundation\Testing\WithFaker;
+
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-
-
-use PHPUnit\Framework\TestCase as BaseTestCase;
-
-# use Tests\TestCase;
+use Tests\TestCase;
 
 use App\Models\Author;
 use App\Models\Book;
 
-class ApiTest extends BaseTestCase
+class ApiTest extends TestCase
 {
-
-	use CreatesApplication;
 
     /**
      * A basic unit test example.
@@ -25,17 +20,17 @@ class ApiTest extends BaseTestCase
      * @return void
      */
 
-
+    /*
     public function test_please_fail()
     {
         $this->assertTrue(false, "This is supposed to fail");
     }
-
+	*/
 
 
     public function test_a_basic_request()
     {
-        $response = $this->get('/');
+        $response = $this->get('/api/');
 
         $response->assertStatus(200);
     }
