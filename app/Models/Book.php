@@ -27,10 +27,31 @@ class Book extends Model
         return $this->belongsTo(Author::class);
     }
 
-
     public function libraries()
     {
         return $this->belongsToMany(Library::class);
+    }
+
+    public function getDetailsAttribute() 
+    {
+        $book = $this;
+        $details = [
+            'title' => $book->name,
+            'author' => $book->author->name,
+            'genre' => $book->author->genre,
+            'year' => $book->year
+        ];
+
+        foreach ($book->libraries as $library) 
+        {
+            array_push($details['libraries'],[
+                'id' => $library->id,
+                'name' => $library->name,
+                'address' => $library->address
+            ]);
+        }
+        
+        return $details;
     }
 
 

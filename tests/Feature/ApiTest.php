@@ -20,8 +20,6 @@ class ApiTest extends TestCase
      *
      * @return void
      */
-
-
     public function test_a_basic_request()
     {
         $response = $this->get('/api/');
@@ -35,41 +33,9 @@ class ApiTest extends TestCase
 
     	$res = $this->get('/api/book/'.$book->id);
 
-    	$expected = [
-    		'title' => $book->name,
-    		'author' => $book->author->name,
-    		'genre' => $book->author->genre,
-    		'year' => $book->year
-    	];
-
-	    foreach ($book->libraries as $library) {
-	    	array_push($expected['libraries'],[
-	    		'id' => $library->id,
-	    		'name' => $library->name,
-	    		'address' => $library->address
-	    	]);
-	    }
-
-    	$res->assertJson($expected);
+    	$res->assertJson($book->details);
     }
 
-    public function test_get_author()
-    {
-
-    	$author = Author::factory()->create();
-
-        $response = $this->get('/api/author/'.$author->id);
-
-        $response->assertJson([
-        	'name' => $author->name,
-        	'birth_date' => $author->birth_date
-        ]);
-    }
-
-    public function test_get_library_books() {
-
-    	$author = Library::factory()->create();
-    }
 
     public function edit_book()
     {
@@ -97,6 +63,4 @@ class ApiTest extends TestCase
     {
         $this->assertTrue(true, "Nothing makes sense");
     }
-
-
 }
