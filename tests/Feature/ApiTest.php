@@ -1,20 +1,36 @@
 <?php
 
+namespace Tests;
+
+
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
 
-use Test\TestCase;
+use PHPUnit\Framework\TestCase as BaseTestCase;
 
-use App\Author;
+# use Tests\TestCase;
 
-class AuthorTest extends TestCase
+use App\Models\Author;
+use App\Models\Book;
+
+class ApiTest extends BaseTestCase
 {
+
+	use CreatesApplication;
+
     /**
      * A basic unit test example.
      *
      * @return void
      */
+
+
+    public function test_please_fail()
+    {
+        $this->assertTrue(false, "This is supposed to fail");
+    }
+
 
 
     public function test_a_basic_request()
@@ -30,6 +46,34 @@ class AuthorTest extends TestCase
     	$author = Author::factory()->create();
 
         $response = $this->get('/author/1');
+
+        $this->assertEquals($response['name'], $author->name);
+
+        $this->assertEquals($response['year'], $author->year);
+
+
+    }
+
+    public function test_sanity()
+    {
+        $this->assertTrue(true, "Nothing makes sense");
+    }
+
+
+    public function post_book()
+    {
+
+    	$book = Book::factory()->create();
+
+        $response = $this->post('/book',[
+        	'id' => 1,
+        	'name' => $book->name,
+        	'year' => $book->year
+        ]);
+
+        $stored = Book::find(1);
+
+
 
     }
 

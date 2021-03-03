@@ -20,7 +20,7 @@ class Book extends Model
 
     protected $fillable = ['name', 'year'];
 
-    protected $hidden = ['deleted_at']; // why isn't Laravel doing this for me?
+    protected $hidden = ['deleted_at']; 
 
     public function author()
     {
