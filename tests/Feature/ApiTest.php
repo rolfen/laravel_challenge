@@ -20,13 +20,6 @@ class ApiTest extends TestCase
      * @return void
      */
 
-    /*
-    public function test_please_fail()
-    {
-        $this->assertTrue(false, "This is supposed to fail");
-    }
-	*/
-
 
     public function test_a_basic_request()
     {
@@ -40,11 +33,11 @@ class ApiTest extends TestCase
 
     	$author = Author::factory()->create();
 
-        $response = $this->get('/author/1');
+        $response = $this->get('/api/author/'.$author->id);
 
         $this->assertEquals($response['name'], $author->name);
 
-        $this->assertEquals($response['year'], $author->year);
+        $this->assertEquals($response['birth_date'], $author->birth_date);
 
 
     }
@@ -67,8 +60,6 @@ class ApiTest extends TestCase
         ]);
 
         $stored = Book::find(1);
-
-
 
     }
 
