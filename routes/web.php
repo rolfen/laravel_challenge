@@ -13,6 +13,29 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+use App\Models\Author;
+use App\Models\Library;
+use App\Models\Book;
+
+
 Route::get('/', function () {
-    return view('welcome');
+
+	// dd( Book::with('author')->get()->toArray() );
+
+	$data = [
+		"books" => dd(Book::with('author', 'libraries')->get()->toArray())
+	];
+
+    return view('list', $data);
+});
+
+
+Route::get('/edit/{id}', function ($id) {
+
+	// dd( Book::with('author')->find($id)->toArray() );
+
+    return view('edit', [
+    	'book' => Book::with('author', 'libraries')->find($id)->toArray(),
+    	'author_list' => Author::pluck('name','id')->toArray()
+    ]);
 });
