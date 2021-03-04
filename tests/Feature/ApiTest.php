@@ -27,13 +27,26 @@ class ApiTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_get_book() {
+    public function test_get_book() 
+    {
 
     	$book = Book::factory()->create();
 
     	$res = $this->get('/api/book/'.$book->id);
 
     	$res->assertJson($book->details);
+    }
+
+    public function test_post_book() {
+
+    	$new = Book::factory()->make();
+
+    	$res = $this->post('/api/book', $new->details);
+
+    	$saved = Book::find($new->id);
+
+    	$this->assertEquals($new, $saved);
+
     }
 
 
