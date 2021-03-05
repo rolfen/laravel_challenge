@@ -37,7 +37,8 @@ class ApiTest extends TestCase
     	$res->assertJson($book->details);
     }
 
-    public function test_post_book() {
+    public function test_post_book_create() 
+    {
 
     	$new_book = Book::factory()->make();
     	$new_details = $new_book->details;
@@ -58,29 +59,32 @@ class ApiTest extends TestCase
     		dump($response);
     	}
 
- 
     }
 
-
-    public function edit_book()
+    public function test_post_book_edit() 
     {
+    	// Create book in DB then update its details
 
     	$book = Book::factory()->create();
 
-    	$book2 = Book::factory()->make();
+    	$new_details = Book::factory()->make()->details;
+    	$new_details['id'] = $book->id;
 
-        $response = $this->post('/book',[
-        	'id' => $book->id,
-        	'name' => $book2->name,
-        	'year' => $book2->year
-        ]);
+    	$response = $this
+    		->withHeaders([
+    			'Accept' => 'application/json'
+    		])
+    		->post('/api/book', $new_details);
 
-        $stored = Book::find($book->id);
 
-        $this->assertEquals($response['name'], $author->name);
-
-        $this->assertEquals($response['birth_date'], $author->birth_date);
-
+    	if ($response->status() == 200)     	{
+    		$this->assertEquals($book->id, $response->content(), "Abnormal reponse.");
+	    	$saved_details = Book::find($book->id)->details;
+	    	$this->assertEquals($new_details, $saved_details);	    	
+    	} else {
+    		$this->fail("Request failed.");
+    		dump($response);
+    	}
 
     }
 

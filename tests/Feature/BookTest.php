@@ -15,13 +15,16 @@ class BookTest extends TestCase
     protected function get_details($book) 
     {
         $expected = [
-            'id' => $book->id,
             'title' => $book->name,
             'author' => $book->author->name,
+            'author_id' => $book->author->id,
             'genre' => $book->author->genre,
             'year' => $book->year,
             'libraries' => []
         ];
+        if(isset($book->id)) {
+            $expected['id'] = $book->id;
+        }
         if(isset($book->libraries)) {
             foreach ($book->libraries as $library) {
                 array_push($expected['libraries'],[
