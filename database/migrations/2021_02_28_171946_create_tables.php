@@ -25,8 +25,8 @@ class CreateTables extends Migration
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->date('birth_date');
-            $table->string('genre');
+            $table->date('birth_date')->nullable();
+            $table->string('genre')->nullable();
         });
 
 

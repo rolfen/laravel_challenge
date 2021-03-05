@@ -39,14 +39,26 @@ class ApiTest extends TestCase
 
     public function test_post_book() {
 
-    	$new = Book::factory()->make();
+    	$new_book = Book::factory()->make();
+    	$new_details = $new_book->details;
 
-    	$res = $this->post('/api/book', $new->details);
+    	$response = $this
+    		->withHeaders([
+    			'Accept' => 'application/json'
+    		])
+    		->post('/api/book', $new_details);
 
-    	$saved = Book::find($new->id);
 
-    	$this->assertEquals($new, $saved);
+    	if ($response->status() == 200)     	{
+	    	$saved_details = Book::find($response->content())->details;
+	    	unset($saved_details["id"]);
+	    	$this->assertEquals($new_details, $saved_details);	    	
+    	} else {
+    		$this->fail("Request failed.");
+    		dump($response);
+    	}
 
+ 
     }
 
 

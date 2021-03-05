@@ -10,29 +10,40 @@ use App\Models\Book;
 
 class BookTest extends TestCase
 {
+
+
+    protected function get_details($book) 
+    {
+        $expected = [
+            'id' => $book->id,
+            'title' => $book->name,
+            'author' => $book->author->name,
+            'genre' => $book->author->genre,
+            'year' => $book->year,
+            'libraries' => []
+        ];
+        if(isset($book->libraries)) {
+            foreach ($book->libraries as $library) {
+                array_push($expected['libraries'],[
+                    'id' => $library->id,
+                    'name' => $library->name,
+                    'address' => $library->address
+                ]);
+            }            
+        }
+        return $expected;
+    }
+
     /**
      * Test book details on the model
      *
      * @return void
      */
-    public function test_book_details() {
+    public function test_get_book_details() 
+    {
         $book = Book::factory()->create();
-
-        $expected = [
-            'title' => $book->name,
-            'author' => $book->author->name,
-            'genre' => $book->author->genre,
-            'year' => $book->year
-        ];
-
-        foreach ($book->libraries as $library) {
-            array_push($expected['libraries'],[
-                'id' => $library->id,
-                'name' => $library->name,
-                'address' => $library->address
-            ]);
-        }
-
-        $this->assertEquals($book->details, $expected);
+        $this->assertEquals($book->details, $this->get_details($book));
     }
+
+
 }

@@ -20,7 +20,7 @@ class Book extends Model
 
     protected $fillable = ['name', 'year'];
 
-    protected $hidden = ['deleted_at']; 
+    protected $hidden = ['deleted_at'];
 
     public function author()
     {
@@ -34,15 +34,21 @@ class Book extends Model
 
     public function getDetailsAttribute() 
     {
-        $book = $this;
+
         $details = [
-            'title' => $book->name,
-            'author' => $book->author->name,
-            'genre' => $book->author->genre,
-            'year' => $book->year
+            'title' => $this->name,
+            'author' => $this->author->name,
+            'author_id' => $this->author->id,
+            'genre' => $this->author->genre,
+            'year' => $this->year,
+            'libraries' => []
         ];
 
-        foreach ($book->libraries as $library) 
+        if($this->id) {
+            $details['id'] = $this->id;
+        }
+
+        foreach ($this->libraries as $library) 
         {
             array_push($details['libraries'],[
                 'id' => $library->id,
@@ -50,9 +56,50 @@ class Book extends Model
                 'address' => $library->address
             ]);
         }
-        
+
         return $details;
     }
 
+    public function setDetailsAttribute($val)
+    {
+        $book = $this;
+
+        if(isset($val['id'])) {
+            $book->id = $val['id'];
+        }
+        $book->name = $val['title'];
+        $book->year = $val['year'];
+
+        /*
+        if(isset($val['author_id'])) {
+            $author = Author::firstOrNew(['id' => $val['author_id']]);
+        } else {
+            $author = Author::create();
+        }
+        */
+        
+        $author = new Author([
+            "name" => $val['author'],
+            "genre" => $val['genre']
+        ]);
+
+        if($val['author_id']) {
+            $author->id = $val['author_id'];
+        }
+
+        $book->author()->associate($author);
+        $book->save();
+
+        if(isset($val['libraries']) and is_array($val['libraries'])) 
+        {
+            foreach ($val['libraries'] as $library) 
+            {
+                $library->id = $val['id'];
+                $library->name = $val['name'];
+                $library->address = $val['address'];
+            }
+        }
+
+    }
 
 }

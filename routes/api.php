@@ -44,6 +44,14 @@ Route::get('/book/{book}', function (Book $book) {
     return $book->details;
 });
 
+Route::post('/book', function (Request $req) {
+	$data = $req->all();
+	$book = Book::make();
+	$book->details = $data;
+	$book->save();
+    return $book->id;
+});
+
 /*
 
 Route::get('/book/{book}/libraries', function (Book $book) {
