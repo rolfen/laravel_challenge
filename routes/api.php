@@ -44,13 +44,20 @@ Route::get('/book/{book}', function (Book $book) {
     return $book->details;
 });
 
-Route::post('/book', function (Request $req) {
-	$data = $req->all();
-	$book = Book::make();
-	$book->details = $data;
+Route::post('/book/{book}', function (Book $book, Request $req) {
+	// $book = Book::find($data['id']);
+	$book->details = $req->all();
 	$book->save();
     return $book->id;
 });
+
+Route::post('/book', function (Request $req) {
+	$book = Book::make();
+	$book->details = $req->all();
+	$book->save();
+    return $book->id;
+});
+
 
 /*
 

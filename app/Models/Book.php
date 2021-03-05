@@ -70,14 +70,6 @@ class Book extends Model
         $book->name = $val['title'];
         $book->year = $val['year'];
 
-        /*
-        if(isset($val['author_id'])) {
-            $author = Author::firstOrNew(['id' => $val['author_id']]);
-        } else {
-            $author = Author::create();
-        }
-        */
-        
         $author = new Author([
             "name" => $val['author'],
             "genre" => $val['genre']

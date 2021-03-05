@@ -15,16 +15,16 @@ class CreateTables extends Migration
     {
         Schema::create('books', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->integer('author_id')->unsigned();
-            $table->smallInteger('year');
+            $table->smallInteger('year')->nullable();
             $table->softDeletes();
             $table->foreign('author_id')->references('id')->on('authors')->onDelete('cascade');
         });
 
         Schema::create('authors', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('genre')->nullable();
         });
@@ -32,8 +32,8 @@ class CreateTables extends Migration
 
         Schema::create('libraries', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('address');
+            $table->string('name')->nullable();
+            $table->string('address')->nullable();
         });
 
         Schema::create('book_library', function (Blueprint $table) {

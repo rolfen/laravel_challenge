@@ -40,51 +40,43 @@ class ApiTest extends TestCase
     public function test_post_book_create() 
     {
 
-    	$new_book = Book::factory()->make();
-    	$new_details = $new_book->details;
+    	$details = Book::factory()->make()->details;
 
     	$response = $this
     		->withHeaders([
     			'Accept' => 'application/json'
     		])
-    		->post('/api/book', $new_details);
+    		->post('/api/book', $details);
 
+    	$this->assertEquals($response->status(), 200);
 
-    	if ($response->status() == 200)     	{
-	    	$saved_details = Book::find($response->content())->details;
-	    	unset($saved_details["id"]);
-	    	$this->assertEquals($new_details, $saved_details);	    	
-    	} else {
-    		$this->fail("Request failed.");
-    		dump($response);
-    	}
+		$saved_details = Book::find($response->content())->details;
+	    unset($saved_details["id"]);
+    	$this->assertEquals($details, $saved_details);	    	
 
     }
 
     public function test_post_book_edit() 
     {
-    	// Create book in DB then update its details
+    	// Create book in DB to be edited
 
     	$book = Book::factory()->create();
 
-    	$new_details = Book::factory()->make()->details;
-    	$new_details['id'] = $book->id;
+    	// Create some details
+
+    	$details = Book::factory()->make()->details;
 
     	$response = $this
     		->withHeaders([
     			'Accept' => 'application/json'
     		])
-    		->post('/api/book', $new_details);
+    		->post('/api/book/'.$book->id , $details);
 
+    	$details['id'] = $book->id;
 
-    	if ($response->status() == 200)     	{
-    		$this->assertEquals($book->id, $response->content(), "Abnormal reponse.");
-	    	$saved_details = Book::find($book->id)->details;
-	    	$this->assertEquals($new_details, $saved_details);	    	
-    	} else {
-    		$this->fail("Request failed.");
-    		dump($response);
-    	}
+    	$this->assertEquals($response->status(), 200);
+
+    	$this->assertEquals($details, Book::find($book->id)->details);	    	
 
     }
 
