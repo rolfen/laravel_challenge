@@ -49,17 +49,16 @@ class ApiTest extends TestCase
     public function test_list() 
     {
 
-    	$bookDetails = function ($book){
+    	$details = Book::factory()->count(5)->create()->map(function ($book)
+    	{
     		return $book->details;
-    	};
-
-    	$books = Book::factory()->count(5)->create();
+    	});
 
     	$response = $this->api()->get('/api/books');
 
     	$response->assertStatus(200);
 
-    	$response->assertJson($books->map($bookDetails)->toArray());
+    	$response->assertJson($details->toArray());
 
     }
 
