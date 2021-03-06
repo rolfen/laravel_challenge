@@ -12,41 +12,74 @@ use App\Models\Author;
 use App\Models\Library;
 use App\Models\Book;
 
+
+/*
+
+TODO:
+
+Test that book-related libraries are being loaded and handled correctly
+
+*/
+
 class ApiTest extends TestCase
 {
+
+	use RefreshDatabase;
+
+	protected function api() {
+		return 
+			$this->withHeaders([
+    			'Accept' => 'application/json'
+    		])
+    	;
+	}
 
     /**
      * A basic unit test example.
      *
      * @return void
      */
-    public function test_a_basic_request()
+    public function test_online()
     {
-        $response = $this->get('/api/');
+        $response = $this->api()->get('/api/');
 
         $response->assertStatus(200);
     }
 
-    public function test_get_book() 
+    public function test_list() 
+    {
+
+    	$bookDetails = function ($book){
+    		return $book->details;
+    	};
+
+    	$books = Book::factory()->count(5)->create();
+
+    	$response = $this->api()->get('/api/books');
+
+    	$response->assertStatus(200);
+
+    	$response->assertJson($books->map($bookDetails)->toArray());
+
+    }
+
+
+    public function test_fetch() 
     {
 
     	$book = Book::factory()->create();
 
-    	$res = $this->get('/api/book/'.$book->id);
+    	$response = $this->api()->get('/api/book/'.$book->id);
 
-    	$res->assertJson($book->details);
+    	$response->assertJson($book->details, $response->content());
     }
 
-    public function test_post_book_create() 
+    public function test_create() 
     {
 
     	$details = Book::factory()->make()->details;
 
-    	$response = $this
-    		->withHeaders([
-    			'Accept' => 'application/json'
-    		])
-    		->post('/api/book', $details);
+    	$response = $this->api()->post('/api/book', $details);
 
     	$this->assertEquals($response->status(), 200);
 
@@ -56,7 +89,7 @@ class ApiTest extends TestCase
 
     }
 
-    public function test_post_book_edit() 
+    public function test_amend() 
     {
     	// Create book in DB to be edited
 
@@ -66,11 +99,7 @@ class ApiTest extends TestCase
 
     	$details = Book::factory()->make()->details;
 
-    	$response = $this
-    		->withHeaders([
-    			'Accept' => 'application/json'
-    		])
-    		->post('/api/book/'.$book->id , $details);
+    	$response = $this->api()->post('/api/book/'.$book->id , $details);
 
     	$details['id'] = $book->id;
 
@@ -78,10 +107,5 @@ class ApiTest extends TestCase
 
     	$this->assertEquals($details, Book::find($book->id)->details);	    	
 
-    }
-
-    public function test_sanity()
-    {
-        $this->assertTrue(true, "Nothing makes sense");
     }
 }

@@ -28,24 +28,19 @@ Route::get('/', function () {
     return "OK";
 });
 
-/*
 
-Route::get('/author/{author}', function (Author $author) {
-    return $author;
+Route::get('/books', function () {
+    return Book::all()->map(function($book){
+    	return $book->details;
+    });
 });
-
-Route::get('/author/{author}/books', function (Author $author) {
-    return $author->books()->get();
-});
-
-*/
 
 Route::get('/book/{book}', function (Book $book) {
     return $book->details;
 });
 
 Route::post('/book/{book}', function (Book $book, Request $req) {
-	// $book = Book::find($data['id']);
+	// $book = Book::firstOrNew(['id' => $req->all()['id']]);
 	$book->details = $req->all();
 	$book->save();
     return $book->id;
@@ -57,16 +52,3 @@ Route::post('/book', function (Request $req) {
 	$book->save();
     return $book->id;
 });
-
-
-/*
-
-Route::get('/book/{book}/libraries', function (Book $book) {
-    return $book->libraries()->get();
-});
-
-Route::get('/library/{library}/books', function (Library $library) {
-    return $library->with('books')->get();
-});
-
-*/
