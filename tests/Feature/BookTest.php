@@ -11,6 +11,7 @@ use App\Models\Book;
 class BookTest extends TestCase
 {
 
+    use RefreshDatabase;
 
     protected function get_details($book) 
     {
