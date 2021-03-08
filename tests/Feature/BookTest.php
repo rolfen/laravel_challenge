@@ -15,7 +15,7 @@ class BookTest extends TestCase
 
     protected function get_details($book) 
     {
-        $expected = [
+        $details = [
             'title' => $book->name,
             'author' => $book->author->name,
             'author_id' => $book->author->id,
@@ -24,18 +24,18 @@ class BookTest extends TestCase
             'libraries' => []
         ];
         if(isset($book->id)) {
-            $expected['id'] = $book->id;
+            $details['id'] = $book->id;
         }
         if(isset($book->libraries)) {
             foreach ($book->libraries as $library) {
-                array_push($expected['libraries'],[
+                array_push($details['libraries'],[
                     'id' => $library->id,
                     'name' => $library->name,
                     'address' => $library->address
                 ]);
             }            
         }
-        return $expected;
+        return $details;
     }
 
     /**

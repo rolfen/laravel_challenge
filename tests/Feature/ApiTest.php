@@ -65,7 +65,6 @@ class ApiTest extends TestCase
 
     public function test_fetch() 
     {
-
     	$book = Book::factory()->create();
 
     	$response = $this->api()->get('/api/book/'.$book->id);
