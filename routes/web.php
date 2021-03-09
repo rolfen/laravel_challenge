@@ -17,29 +17,15 @@ use App\Models\Author;
 use App\Models\Library;
 use App\Models\Book;
 
-
-Route::get('/', function () {
-
-	$data = [
-		"books" => Book::with('author', 'libraries')->get()->toArray()
-	];
-
-    return view('list', $data);
-});
+use App\Http\Controllers\AdminController;
 
 
-Route::get('/edit/{id}', function ($id) {
-	$book = Book::find($id);
-	$libraries = $book->libraries;
-	$author_list = Author::pluck('name','id')->toArray();
-	$library_list = Library::pluck('name','id')->toArray();
+Route::get('/', [AdminController::class, 'listBooks']);
 
+Route::post('/edit/', [AdminController::class, 'editBook']);
 
-    return view('edit', [
-    	'book' => $book,
-    	'author' => $book->author,
-    	'libraries' => $libraries,
-    	'author_list' => $author_list,
-    	'library_list' => $library_list
-    ]);
-});
+Route::post('/edit/{id}', [AdminController::class, 'editBook']);
+
+Route::get('/edit/{id}', [AdminController::class, 'editBook']);
+
+Route::get('/edit/', [AdminController::class, 'editBook']);

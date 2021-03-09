@@ -41,7 +41,5 @@ class DatabaseSeeder extends Seeder
         	->count(2)
         	->has($bookFactory2)
         	->create();
-
-
     }
 }

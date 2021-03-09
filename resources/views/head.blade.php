@@ -40,5 +40,8 @@
                 float: right;
                 clear: both;
             }
+            .go-back {
+                float: right;
+            }
 
         </style>

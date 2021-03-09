@@ -6,8 +6,9 @@
    <body>
         <div>
             <h2>All Books</h2>
-
-            <button class="align-right">Add Book</button>
+            <form action="/edit/">
+                <input type="submit" class="align-right" value="Add Book" />
+            </form>
             <table>
                 <thead>
                     <th>Name</th>
@@ -34,7 +35,7 @@
                             -->
                             <td>
                                 <a href="./edit/<?= $book['id'] ?>">Edit</a>
-                                <a href="./delete/<?= $book['id'] ?>">Delete</a>
+                                <a href="./?deleteBook=<?= $book['id'] ?>">Delete</a>
                             </td>
                         </tr>
                     <?php } ?>
