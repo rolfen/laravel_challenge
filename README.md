@@ -4,7 +4,7 @@ These are instruction for a quick trial on a local computer. It uses the testing
 
 ## Installing
 
-First clone this repository.
+First clone this repository and `cd` into it.
 
 ```
 composer install
@@ -14,9 +14,10 @@ composer install
 touch database/database.sqlite
 php artisan key:generate --env=testing
 php artisan migrate:fresh --env=testing
+php artisan db:seed --env=testing
 ```
 
-## Running tests
+## Running api tests
 
 ```
 php artisan test
