@@ -47,7 +47,6 @@ Route::post('/book/{book}', function (Book $book, Request $req) {
 
 Route::post('/book', function (Request $req) {
 	$book = Book::make();
-	dd($req->all());
 	$book->saveDetails($req->all());
     return $book->id;
 });
