@@ -44,7 +44,6 @@ Route::get('/book/delete/{book}', function (Book $book) {
 });
 
 Route::post('/book/{book}', function (Book $book, Request $req) {
-	// $book = Book::firstOrNew(['id' => $req->all()['id']]);
 	$book->saveDetails($req->all());
     return $book->id;
 });

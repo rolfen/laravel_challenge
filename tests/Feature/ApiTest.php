@@ -13,14 +13,6 @@ use App\Models\Library;
 use App\Models\Book;
 
 
-/*
-
-TODO:
-
-Test that book-related libraries are being loaded and handled correctly
-
-*/
-
 class ApiTest extends TestCase
 {
 
