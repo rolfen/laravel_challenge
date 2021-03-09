@@ -17,6 +17,14 @@ php artisan migrate:fresh --env=testing
 php artisan db:seed --env=testing
 ```
 
+### Windows
+
+If you are on Windows and `touch` is not available, then you can try the following command instead, to create an emtpy file. Alternatively just create and save an empty `database.sqlite` file using Notepad, for example.
+
+```
+type nul > database\database.sqlite
+```
+
 ## Running api tests
 
 ```
