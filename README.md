@@ -1,5 +1,5 @@
 
-These are instruction for a quick trial on a local computer (not a public server!). It uses the testing environment an sqlite database and is served using the embedded development server.
+These are instruction for a quick trial on a local, private machine. It uses the testing environment an sqlite database and is served using the embedded development server.
 
 
 ## Installing
