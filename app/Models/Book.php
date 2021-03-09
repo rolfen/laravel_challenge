@@ -71,23 +71,30 @@ class Book extends Model
         $book->name = $val['title'];
         $book->year = $val['year'];
 
-        if(isset($val['author_id'])) {
-            $author = Author::findOrNew($val['author_id']);
+        if(isset($val['author_id']) and !is_null($val['author_id'])) {
+            $author = Author::updateOrCreate([
+                'id' => $val['author_id']
+            ],[
+                'name' => $val['author'],
+                'genre' => $val['genre']
+            ]);
         } else {
-            $author = Author::make();           
+            $author = Author::create([
+                'name' => $val['author'],
+                'genre' => $val['genre']
+            ]);           
         }
-
-        $author->name = $val['author'];
-        $author->genre = $val['genre'];
 
         $book->author()->associate($author);
 
+        $book->save();
+
         if(isset($val['libraries']) and is_array($val['libraries'])) 
         {
-            $libraries = [];
+            $library_ids = [];
             foreach ($val['libraries'] as $library_details )
             {
-                if(isset($library_details['id'])) {
+                if(isset($library_details['id']) and !is_null($library_details['id'])) {
                     $library = Library::updateOrCreate([
                         'id' => $library_details['id']
                     ], [
@@ -100,10 +107,9 @@ class Book extends Model
                         'address' => $library_details['address']
                     ]);
                 }
-
-                array_push($libraries, $library);
+                array_push($library_ids, $library->id);
             }
-            $book->libraries()->sync($libraries);
+            $book->libraries()->sync($library_ids);
         }
     }
 }

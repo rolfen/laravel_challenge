@@ -77,22 +77,31 @@ class ApiTest extends TestCase
 
     	$book = Book::factory()->create();
 
+
+		$new_libraries = collect(Library::factory()->count(1)->make());
+		$saved_libraries = collect(Library::factory()->count(3)->create());
+		$libraries = $saved_libraries->merge($new_libraries);
+
     	$book->setRelation(
     		'libraries',
-    		Library::factory()->count(1)->make()
+    		$libraries
     	);
 
-    	$book->libraries()->attach(Library::factory()->count(2)->create());
-
-
     	$book_details = $book->getDetails();
+
 	    unset($book_details["id"]);
     	$response = $this->api()->post('/api/book', $book_details);
 
     	$this->assertEquals($response->status(), 200);
 
+    	// fetch ID of created book and find it in the DB
 		$saved_details = Book::find($response->content())->getDetails();	    
+
+
+		// unset all newly generated IDs to pass tests
 	    unset($saved_details["id"]);
+	    unset($book_details['libraries'][array_key_last($book_details['libraries'])]['id']);
+	    unset($saved_details['libraries'][array_key_last($book_details['libraries'])]['id']);
 
     	$this->assertEquals($book_details, $saved_details);	    	
 
