@@ -31,24 +31,23 @@ Route::get('/', function () {
 
 Route::get('/books', function () {
     return Book::all()->map(function($book){
-    	return $book->details;
+    	return $book->getDetails();
     });
 });
 
 Route::get('/book/{book}', function (Book $book) {
-    return $book->details;
+    return $book->getDetails();
 });
 
 Route::post('/book/{book}', function (Book $book, Request $req) {
 	// $book = Book::firstOrNew(['id' => $req->all()['id']]);
-	$book->details = $req->all();
-	$book->save();
+	$book->saveDetails($req->all());
     return $book->id;
 });
 
 Route::post('/book', function (Request $req) {
 	$book = Book::make();
-	$book->details = $req->all();
-	$book->save();
+	dd($req->all());
+	$book->saveDetails($req->all());
     return $book->id;
 });

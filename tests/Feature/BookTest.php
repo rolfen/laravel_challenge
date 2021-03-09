@@ -7,13 +7,15 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 use App\Models\Book;
+use App\Models\Library;
+
 
 class BookTest extends TestCase
 {
 
     use RefreshDatabase;
 
-    protected function get_details($book) 
+    protected function getDetails($book) 
     {
         $details = [
             'title' => $book->name,
@@ -45,9 +47,13 @@ class BookTest extends TestCase
      */
     public function test_get_book_details() 
     {
+        $library_count = 3;
         $book = Book::factory()->create();
-        $this->assertEquals($book->details, $this->get_details($book));
+        $libraries = Library::factory()->count($library_count)->create();
+        $book->libraries()->attach($libraries);
+        $book_details = $book->getDetails();
+        $this->assertEquals($book_details, $this->getDetails($book));
+        $this->assertEquals(count($book_details['libraries']), $library_count);
     }
-
 
 }

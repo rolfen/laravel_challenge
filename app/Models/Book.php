@@ -32,7 +32,7 @@ class Book extends Model
         return $this->belongsToMany(Library::class);
     }
 
-    public function getDetailsAttribute() 
+    public function getDetails() 
     {
 
         $details = [
@@ -60,8 +60,9 @@ class Book extends Model
         return $details;
     }
 
-    public function setDetailsAttribute($val)
+    public function saveDetails($val)
     {
+
         $book = $this;
 
         if(isset($val['id'])) {
@@ -70,28 +71,39 @@ class Book extends Model
         $book->name = $val['title'];
         $book->year = $val['year'];
 
-        $author = new Author([
-            "name" => $val['author'],
-            "genre" => $val['genre']
-        ]);
-
-        if($val['author_id']) {
-            $author->id = $val['author_id'];
+        if(isset($val['author_id'])) {
+            $author = Author::findOrNew($val['author_id']);
+        } else {
+            $author = Author::make();           
         }
 
+        $author->name = $val['author'];
+        $author->genre = $val['genre'];
+
         $book->author()->associate($author);
-        $book->save();
 
         if(isset($val['libraries']) and is_array($val['libraries'])) 
         {
-            foreach ($val['libraries'] as $library) 
+            $libraries = [];
+            foreach ($val['libraries'] as $library_details )
             {
-                $library->id = $val['id'];
-                $library->name = $val['name'];
-                $library->address = $val['address'];
+                if(isset($library_details['id'])) {
+                    $library = Library::updateOrCreate([
+                        'id' => $library_details['id']
+                    ], [
+                        'name' => $library_details['name'],
+                        'address' => $library_details['address']
+                    ]);
+                } else {
+                    $library = Library::create([
+                        'name' => $library_details['name'],
+                        'address' => $library_details['address']
+                    ]);
+                }
+
+                array_push($libraries, $library);
             }
+            $book->libraries()->sync($libraries);
         }
-
     }
-
 }

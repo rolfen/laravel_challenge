@@ -51,7 +51,7 @@ class ApiTest extends TestCase
 
     	$details = Book::factory()->count(5)->create()->map(function ($book)
     	{
-    		return $book->details;
+    		return $book->getDetails();
     	});
 
     	$response = $this->api()->get('/api/books');
@@ -69,21 +69,32 @@ class ApiTest extends TestCase
 
     	$response = $this->api()->get('/api/book/'.$book->id);
 
-    	$response->assertJson($book->details, $response->content());
+    	$response->assertJson($book->getDetails(), $response->content());
     }
 
     public function test_create() 
     {
 
-    	$details = Book::factory()->make()->details;
+    	$book = Book::factory()->create();
 
-    	$response = $this->api()->post('/api/book', $details);
+    	$book->setRelation(
+    		'libraries',
+    		Library::factory()->count(1)->make()
+    	);
+
+    	$book->libraries()->attach(Library::factory()->count(2)->create());
+
+
+    	$book_details = $book->getDetails();
+	    unset($book_details["id"]);
+    	$response = $this->api()->post('/api/book', $book_details);
 
     	$this->assertEquals($response->status(), 200);
 
-		$saved_details = Book::find($response->content())->details;
+		$saved_details = Book::find($response->content())->getDetails();	    
 	    unset($saved_details["id"]);
-    	$this->assertEquals($details, $saved_details);	    	
+
+    	$this->assertEquals($book_details, $saved_details);	    	
 
     }
 
@@ -95,7 +106,7 @@ class ApiTest extends TestCase
 
     	// Create some details
 
-    	$details = Book::factory()->make()->details;
+    	$details = Book::factory()->make()->getDetails();
 
     	$response = $this->api()->post('/api/book/'.$book->id , $details);
 
@@ -103,7 +114,7 @@ class ApiTest extends TestCase
 
     	$this->assertEquals($response->status(), 200);
 
-    	$this->assertEquals($details, Book::find($book->id)->details);	    	
+    	$this->assertEquals($details, Book::find($book->id)->getDetails());	    	
 
     }
 }
