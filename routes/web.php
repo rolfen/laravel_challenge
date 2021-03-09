@@ -20,8 +20,6 @@ use App\Models\Book;
 
 Route::get('/', function () {
 
-	// dd( Book::with('author')->get()->toArray() );
-
 	$data = [
 		"books" => Book::with('author', 'libraries')->get()->toArray()
 	];
@@ -31,11 +29,17 @@ Route::get('/', function () {
 
 
 Route::get('/edit/{id}', function ($id) {
+	$book = Book::find($id);
+	$libraries = $book->libraries;
+	$author_list = Author::pluck('name','id')->toArray();
+	$library_list = Library::pluck('name','id')->toArray();
 
-	// dd( Book::with('author')->find($id)->toArray() );
 
     return view('edit', [
-    	'book' => Book::with('author', 'libraries')->find($id)->toArray(),
-    	'author_list' => Author::pluck('name','id')->toArray()
+    	'book' => $book,
+    	'author' => $book->author,
+    	'libraries' => $libraries,
+    	'author_list' => $author_list,
+    	'library_list' => $library_list
     ]);
 });
